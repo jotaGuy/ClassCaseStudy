@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -18,13 +17,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig {
-    // Your security configuration code goes here
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         // boilerplate code to disable csrf and authorize requests
-        http.csrf(AbstractHttpConfigurer::disable);
+        http.csrf(csrf -> csrf.disable());
 
         // this block of code determines which requests are authenticated
         http.authorizeRequests()
@@ -51,9 +49,11 @@ public class SecurityConfig {
         return http.build();
     }
 
+
     @Bean(name = "passwordEncoder")
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-}
 
+
+}
